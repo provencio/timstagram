@@ -1,5 +1,9 @@
 class Post < ActiveRecord::Base
 
+  validates :user_id, presence: true
+
+  belongs_to :user
+
   validates :image, presence: true
   validates :caption, length: { minimum: 3, maximum: 300 }
 
