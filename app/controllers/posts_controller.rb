@@ -52,7 +52,13 @@ class PostsController < ApplicationController
 	end
 	
 	def destroy
-	    @post.destroy
+	    if @post.destroy
+		flash[:success] = "The post was removed"
+	    else		
+		flash[:alert] = "There was an issue removing the post"
+	    end if
+
+
 	    redirect_to posts_path
 	end
 end
