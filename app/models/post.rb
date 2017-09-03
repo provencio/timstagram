@@ -6,8 +6,4 @@ class Post < ActiveRecord::Base
 
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
-  def create
-    @post = Post.create(post_params)
-  end
-
 end
