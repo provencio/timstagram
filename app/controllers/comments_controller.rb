@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
     @comment.user_id = current_user.id
 
     if @comment.save
-      flash[:success] = "You commented the hell out of that post!"
+      flash[:success] = "Your comment worked perfectly!"
       redirect_to :back
     else
       flash[:alert] = "Check the comment form, something went horribly wrong."
