@@ -9,31 +9,30 @@ class PostsController < ApplicationController
 	end
 
 
-        def new
+    def new
 		@post = current_user.posts.build
 	end
 
-        def create
+    def create
 	    
 	    @post = current_user.posts.build(post_params)
 
 	    if @post.save
-		flash[:success] = "Your post has been created!"
- 		redirect_to posts_path
-    	    else
-		flash.now[:alert] = "Your new post couldn't be created!  Please check the form."
+			flash[:success] = "Your post has been created!"
+ 			redirect_to posts_path
+    	else
+			flash.now[:alert] = "Your new post couldn't be created!  Please check the form."
       		render :new
-    	    end
+		end
+		
+    end
 
-        end
-
-
-    	private def post_params
-           params.require(:post).permit(:image, :caption)
-        end
+    private def post_params
+        params.require(:post).permit(:image, :caption)
+    end
 
 	def set_post
-    	    @post = Post.find(params[:id])
+    	@post = Post.find(params[:id])
   	end
 	
 	def show
@@ -46,21 +45,20 @@ class PostsController < ApplicationController
 
 	def update
 	    if @post.update(post_params)
-		flash[:success] = "Post updated."
+			flash[:success] = "Post updated."
       		redirect_to posts_path
-    	    else
-		flash.now[:alert] = "Update failed.  Please check the form."
+    	else
+			flash.now[:alert] = "Update failed.  Please check the form."
       		render :edit
-    	    end	
+    	end	
 	end
 	
 	def destroy
 	    if @post.destroy
-		flash[:success] = "The post was removed"
+			flash[:success] = "The post was removed"
 	    else		
-		flash[:alert] = "There was an issue removing the post"
+			flash[:alert] = "There was an issue removing the post"
 	    end if
-
 
 	    redirect_to posts_path
 	end
@@ -69,11 +67,8 @@ class PostsController < ApplicationController
   	    unless current_user == @post.user
     	    flash[:alert] = "That post doesn't belong to you!"
     	    redirect_to root_path
-  	end
+  		end
+	end
 
 end
-
-
-end
-
 
