@@ -120,7 +120,7 @@ GEM
     nokogiri (1.15.4-x86_64-darwin)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    paperclip (4.2.4)
+    paperclip (5.2.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       cocaine (~> 0.5.5)
