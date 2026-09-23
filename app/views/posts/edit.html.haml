@@ -1,5 +1,5 @@
 .text-center
-  - if @post.image.attached?
+  - if @post.image.attached? && @post.image.variable?
     = image_tag @post.image.variant(:medium)
    
 = render 'form'
