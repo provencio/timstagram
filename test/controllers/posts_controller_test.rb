@@ -28,6 +28,22 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'index survives a stored attachment that cannot be turned into a variant' do
+    # A row that predates the content type allowlist: attached, but SVG, which
+    # raises ActiveStorage::InvariableError if it reaches variant(:medium).
+    legacy = posts(:two)
+    legacy.image.attach(
+      io: StringIO.new(%(<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>)),
+      filename: 'legacy.svg',
+      content_type: 'image/svg+xml'
+    )
+    legacy.save!(validate: false)
+    assert_not legacy.image.variable?
+
+    get root_path
+    assert_response :success
+  end
+
   test 'show renders a single post' do
     get post_path(@post)
     assert_response :success

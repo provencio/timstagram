@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class PostTest < ActiveSupport::TestCase
+  SVG = %(<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><script>alert(1)</script></svg>).freeze
+
   def setup
     @user = User.create!(
       email: 'poster@example.com',
@@ -27,7 +29,32 @@ class PostTest < ActiveSupport::TestCase
       content_type: 'text/plain'
     )
     assert_not @post.valid?
-    assert_includes @post.errors[:image], 'must be an image file'
+    assert_match(/must be an image file/, @post.errors[:image].to_sentence)
+  end
+
+  test 'rejects image types Active Storage cannot turn into a variant' do
+    @post.image.attach(
+      io: StringIO.new(SVG),
+      filename: 'evil.svg',
+      content_type: 'image/svg+xml'
+    )
+
+    assert_not @post.image.variable?
+    assert_not @post.valid?
+    assert_match(/must be an image file/, @post.errors[:image].to_sentence)
+  end
+
+  test 'ignores the content type declared by the client' do
+    # An SVG uploaded as image/png is identified from its contents on attach,
+    # so it cannot sneak past the content type validation.
+    @post.image.attach(
+      io: StringIO.new(SVG),
+      filename: 'evil.svg',
+      content_type: 'image/png'
+    )
+
+    assert_equal 'image/svg+xml', @post.image.content_type
+    assert_not @post.valid?
   end
 
   test 'exposes a medium variant that is resized to 640px wide' do
