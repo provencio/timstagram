@@ -1,11 +1,12 @@
 class CommentsController < ApplicationController
 
+  before_action :authenticate_user!
   before_action :set_post
 
   def create
     @comment = @post.comments.build(comment_params)
     @comment.user_id = current_user.id
-    
+
     if @comment.save
       respond_to do |format|
         format.html { redirect_to root_path }
@@ -13,7 +14,23 @@ class CommentsController < ApplicationController
       end
     else
       flash[:alert] = "Check the comment form, something went wrong."
-      render root_path
+      redirect_to root_path
+    end
+  end
+
+  def destroy
+    @comment = @post.comments.find(params[:id])
+
+    unless owned_comment?
+      flash[:alert] = "That comment doesn't belong to you!"
+      redirect_to root_path
+      return
+    end
+
+    @comment.delete
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js
     end
   end
 
@@ -25,16 +42,8 @@ class CommentsController < ApplicationController
     @post = Post.find(params[:post_id])
   end
 
-  def destroy
-    @comment = @post.comments.find(params[:id])
-
-    if @comment.user_id == current_user.id
-      @comment.delete
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.js
-      end
-    end
+  private def owned_comment?
+    @comment.user_id == current_user.id
   end
 
 end
