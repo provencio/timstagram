@@ -5,6 +5,7 @@ namespace :paperclip do
       abort 'The Paperclip columns are already gone - nothing to migrate.'
     end
 
+    root = Rails.root.join('public', 'system', 'posts', 'images')
     migrated = 0
     skipped  = 0
 
@@ -14,12 +15,15 @@ namespace :paperclip do
         next
       end
 
-      file_name = post.read_attribute(:image_file_name)
+      # The stored file name is whatever the uploader sent years ago, so keep
+      # it to a single path segment and confirm the result is still inside
+      # public/system before opening it.
+      file_name = File.basename(post.read_attribute(:image_file_name).to_s)
       id_partition = format('%09d', post.id).scan(/\d{3}/).join('/')
-      path = Rails.root.join('public', 'system', 'posts', 'images', id_partition, 'original', file_name)
+      path = root.join(id_partition, 'original', file_name)
 
-      unless File.exist?(path)
-        warn "Post #{post.id}: missing #{path}"
+      unless path.to_s.start_with?("#{root}/") && File.file?(path)
+        warn "Post #{post.id}: no readable file at #{path}"
         skipped += 1
         next
       end
