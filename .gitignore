@@ -42,3 +42,14 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# Ignore compiled assets.
+/public/assets
+
+# Ignore Active Storage files kept by the local disk service.
+/storage/*
+!/storage/.keep
+/tmp/storage
+
+# Ignore node modules installed for the asset pipeline.
+/node_modules

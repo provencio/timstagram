@@ -1,5 +1,6 @@
 .text-center
-  = image_tag @post.image.url(:medium)
+  - if @post.image.attached?
+    = image_tag @post.image.variant(:medium)
    
 = render 'form'
  
