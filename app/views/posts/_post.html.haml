@@ -10,6 +10,7 @@
   - if post.image.attached? && post.image.variable?
     = link_to post_path(post), class: 'post-image' do
       = image_tag post.image.variant(:medium), alt: post.caption
+  = render 'posts/reactions', post: post
   .post-body
     %p.caption
       %span.user-name= post.user.user_name

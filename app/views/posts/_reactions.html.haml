@@ -1,0 +1,23 @@
+-# Shows only the reactions someone has used, plus a picker with all of them.
+-# Choosing your current reaction again removes it.
+- mine = post.reactions.find { |reaction| reaction.user_id == current_user.id }&.kind
+- by_kind = post.reactions.group_by(&:kind)
+.reactions{id: "reactions_#{post.id}"}
+  - Reaction::KINDS.each do |kind, label|
+    - if (reactions = by_kind[kind])
+      = button_to post_reaction_path(post), method: (kind == mine ? :delete : :put), params: (kind == mine ? {} : { kind: kind }),
+        remote: true, form_class: 'reaction-form', class: ['reaction', ('chosen' if kind == mine)],
+        title: reactions.map { |reaction| reaction.user.user_name }.to_sentence,
+        'aria-pressed': kind == mine, 'aria-label': "#{label}, #{pluralize(reactions.size, 'reaction')}" do
+        = icon(kind.to_sym)
+        %span= reactions.size
+  %details.reaction-picker
+    %summary.reaction-add{title: (mine ? 'Change reaction' : 'Add reaction')}
+      = icon(:add_reaction)
+      %span.sr-only= mine ? 'Change reaction' : 'Add reaction'
+    .picker{role: 'group', 'aria-label': 'Reactions'}
+      - Reaction::KINDS.each do |kind, label|
+        = button_to post_reaction_path(post), method: (kind == mine ? :delete : :put), params: (kind == mine ? {} : { kind: kind }),
+          remote: true, form_class: 'picker-form', class: ['picker-option', ('chosen' if kind == mine)],
+          title: label, 'aria-label': label, 'aria-pressed': kind == mine do
+          = icon(kind.to_sym)
