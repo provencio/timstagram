@@ -67,4 +67,25 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal "That comment doesn't belong to you!", flash[:alert]
   end
+
+  test 'commenting over xhr appends the comment without jQuery' do
+    sign_in @user
+
+    post post_comments_path(@post), params: { comment: { content: 'Nice shot' } }, xhr: true
+
+    assert_equal 'text/javascript', response.media_type
+    assert_includes response.body, "getElementById('comments_#{@post.id}')"
+    assert_includes response.body, 'Nice shot'
+    assert_not_includes response.body, '$('
+  end
+
+  test 'deleting over xhr re-renders the remaining comments without jQuery' do
+    sign_in @user
+
+    delete post_comment_path(@post, @comment), xhr: true
+
+    assert_equal 'text/javascript', response.media_type
+    assert_includes response.body, "getElementById('comments_#{@post.id}')"
+    assert_not_includes response.body, '$('
+  end
 end

@@ -1,2 +1,9 @@
--@posts.each do |post|
-  = render 'post', post: post
+.feed
+  - if @posts.empty?
+    .feed-empty
+      %p Nothing here yet.
+      = link_to new_post_path, class: 'btn btn-primary' do
+        = icon(:plus)
+        Share the first post
+  - else
+    = render partial: 'post', collection: @posts, as: :post

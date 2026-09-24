@@ -31,7 +31,6 @@ gem 'terser', '>= 1.2'
 gem 'image_processing', '~> 2.1'
 gem 'ruby-vips', '>= 2.2'
 
-gem 'bootstrap-sass', '~> 3.4.1'
 gem 'simple_form', '~> 5.4'
 gem 'haml', '~> 7.5'
 gem 'devise', '>= 5.0.4'

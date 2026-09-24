@@ -1,15 +1,21 @@
-%html
+!!! 5
+%html{lang: "en"}
   %head
     %title Timstagram
     %meta{:charset => "utf-8"}
     %meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
     %meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}
+    %meta{:name => "theme-color", :content => "#131115"}
+    %link{rel: "preconnect", href: "https://fonts.googleapis.com"}
+    %link{rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: true}
+    %link{rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap"}
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
-%body
-  = render 'layouts/navbar'
-  -flash.each do |name, msg|
-    .container
-    = content_tag :div, msg, class: [:alert, alert_for(name)]
-  = yield
+  %body
+    = render 'layouts/navbar'
+    - flash.each do |name, msg|
+      .flash
+        = content_tag :div, msg, class: [:alert, alert_for(name)], role: 'status'
+    %main
+      = yield
