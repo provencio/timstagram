@@ -1,10 +1,4 @@
-.text-center
-  - if @post.image.attached? && @post.image.variable?
-    = image_tag @post.image.variant(:medium)
-   
-= render 'form'
- 
-.text-center.edit-links
-  = link_to "Delete Post", post_path(@post), method: :delete, data: { confirm: "Are you sure you want to delete this post?" }
-  |
-  = link_to "cancel", posts_path
+= render 'form', title: 'Edit post', submit_label: 'Save changes'
+
+.edit-links
+  = link_to "Delete post", post_path(@post), method: :delete, data: { confirm: "Are you sure you want to delete this post?" }, class: 'btn btn-quiet danger'

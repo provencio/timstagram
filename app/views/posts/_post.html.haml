@@ -1,23 +1,24 @@
-.posts-wrapper
-    .post
-        .post-head
-            .thumb-img
-            .user-name
-                = post.user.user_name
-        .image.center-block
-            - if post.image.attached? && post.image.variable?
-                = link_to (image_tag post.image.variant(:medium), class:'img-responsive'), post_path(post)
-        .post-bottom
-            .caption
-                .user-name
-                    = post.user.user_name
-            = post.caption
-        .comments{id: "comments_#{post.id}"}
-            - if post.comments
-                = render post.comments, post: post
-    .comment-like-form.row
-        .like-button.col-sm-1
-            %span(class="glyphicon glyphicon-heart-empty")
-        .comment-form.col-sm-11
-            = form_for [post, post.comments.build] do |f|
-                = f.text_field :content, placeholder: 'Add a comment...', class: "comment_content", id: "comment_content_#{post.id}"
+%article.post{id: "post_#{post.id}"}
+  .post-head
+    = avatar_for(post.user)
+    .post-meta
+      %span.user-name= post.user.user_name
+      = short_time_ago(post.created_at)
+    - if post.user == current_user
+      = link_to edit_post_path(post), class: 'btn btn-quiet btn-icon', 'aria-label': 'Edit post' do
+        = icon(:edit)
+  - if post.image.attached? && post.image.variable?
+    = link_to post_path(post), class: 'post-image' do
+      = image_tag post.image.variant(:medium), alt: post.caption
+  .post-body
+    %p.caption
+      %span.user-name= post.user.user_name
+      = post.caption
+    .comments{id: "comments_#{post.id}"}
+      = render post.comments, post: post
+  = form_for [post, post.comments.build], html: { class: 'comment-form' } do |f|
+    %label
+      %span.sr-only Add a comment
+      = f.text_field :content, placeholder: 'Add a comment…', class: 'comment-input', id: "comment_content_#{post.id}", autocomplete: 'off'
+    %button.btn.btn-icon.comment-submit{type: 'submit', 'aria-label': 'Send comment'}
+      = icon(:send)

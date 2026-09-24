@@ -1,17 +1,21 @@
-.posts-wrapper
-  .post
-    .post-body
-      .image-wrap
-        = simple_form_for @post, html: { multipart: true } do |f|
-          .row
-            .col-md-12.text-center
-              = f.error_notification
-          .container-fluid
-            .form-group.text-center
-              %h4 Upload an image:
-              = f.input :image, label: false, input_html: { onChange: 'loadFile(event)' }
-            .form-group.text-center
-              = f.input :caption, label: false, placeholder: 'Add your caption'
-            .form-group.text-center
-              = f.button :submit, class: 'btn-success btn-block'
-
+.page
+  .page-head
+    = link_to "Cancel", (@post.persisted? ? post_path(@post) : posts_path), class: 'btn btn-quiet'
+    %h1= title
+  = simple_form_for @post, html: { multipart: true, class: 'post-form' } do |f|
+    = f.error_notification
+    -# After a failed save the pending upload has no stored blob to build a variant from.
+    - existing = @post.persisted? && @post.image.attached? && @post.image.variable? && !@post.attachment_changes.key?('image')
+    %label.dropzone{class: ('has-image' if existing)}
+      .dropzone-prompt
+        .dropzone-icon= icon(:upload)
+        %span.dropzone-title Choose a photo or meme
+        %span.dropzone-hint JPG, PNG, GIF or WebP
+      - if existing
+        = image_tag @post.image.variant(:medium), id: 'image-preview', alt: ''
+      - else
+        %img#image-preview{alt: '', hidden: true}
+      = f.file_field :image, accept: 'image/*', onChange: 'loadFile(event)'
+    = f.error :image
+    = f.input :caption, as: :text, input_html: { rows: 3, maxlength: 300 }, placeholder: 'Say something…'
+    = f.button :submit, submit_label, class: 'btn-primary btn-lg btn-block'

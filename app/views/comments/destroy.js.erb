@@ -1,2 +1,1 @@
-$('#comments_<%= @post.id %>').html("<%= j render @post.comments,
-post: @post, comment: @comment %>");
+document.getElementById('comments_<%= @post.id %>').innerHTML = "<%= j render @post.comments, post: @post %>";

@@ -75,4 +75,20 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test 'new renders the upload drop zone' do
+    get new_post_path
+
+    assert_response :success
+    assert_select 'label.dropzone input[type=file]#post_image'
+  end
+
+  test 'a failed update re-renders the form without the pending upload' do
+    patch post_path(@post), params: {
+      post: { caption: 'x', image: fixture_file_upload('sample.png', 'image/png') }
+    }
+
+    assert_response :success
+    assert_select 'label.dropzone:not(.has-image)'
+  end
 end

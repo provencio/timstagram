@@ -1,9 +1,6 @@
-= render 'post', post: @post
-- if @post.user.id == current_user.id
-  .text-center.edit-links
-    = link_to "Cancel", posts_path
-    |
-    = link_to "Edit Post", edit_post_path(@post)
-- else
-  .text-center.edit-links
-    =link_to "Cancel", posts_path
+.feed
+  = render 'post', post: @post
+.edit-links
+  = link_to "Back to feed", posts_path, class: 'btn btn-quiet'
+  - if @post.user == current_user
+    = link_to "Edit post", edit_post_path(@post), class: 'btn'
