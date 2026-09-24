@@ -1,0 +1,6 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+two_loves_one:
+  user: two
+  post: one
+  kind: love

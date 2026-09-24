@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
 	resources :posts do
 	  resources :comments
+	  resource :reaction, only: [:update, :destroy]
 	end
 
 end

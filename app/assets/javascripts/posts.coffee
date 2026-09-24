@@ -11,3 +11,14 @@ window.loadFile = (event) ->
   preview.src = URL.createObjectURL(file)
   preview.hidden = false
   event.target.closest('.dropzone').classList.add('has-image')
+
+# Closes an open reaction picker on a click outside it, or on Escape.
+document.addEventListener 'click', (event) ->
+  for picker in document.querySelectorAll('.reaction-picker[open]')
+    picker.open = false unless picker.contains(event.target)
+
+document.addEventListener 'keydown', (event) ->
+  return unless event.key == 'Escape'
+  for picker in document.querySelectorAll('.reaction-picker[open]')
+    picker.open = false
+    picker.querySelector('summary').focus()

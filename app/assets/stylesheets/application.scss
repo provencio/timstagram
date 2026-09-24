@@ -404,6 +404,128 @@ h1, h2, h3 {
   }
 }
 
+/* ## REACTIONS ## */
+
+.reactions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 0;
+}
+
+// button_to wraps every button in its own form; let the buttons lay out as siblings.
+.reaction-form, .picker-form {
+  display: contents;
+}
+
+.reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    border-color: var(--text-muted);
+  }
+  &.chosen {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 700;
+  }
+}
+
+.reaction-add {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--line);
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+  &::-webkit-details-marker {
+    display: none;
+  }
+  &:hover {
+    color: var(--text);
+    border-color: var(--text-muted);
+  }
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.reaction-picker[open] .reaction-add {
+  background: var(--line);
+  border-color: var(--text);
+  color: var(--text);
+}
+
+// Opens upward over the bottom of the photo, anchored to the reactions row.
+.picker {
+  position: absolute;
+  left: 16px;
+  bottom: calc(100% - 2px);
+  z-index: 5;
+  max-width: calc(100% - 32px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 28px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.picker-option {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+  &:hover {
+    background: var(--line-strong);
+  }
+  &.chosen {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+}
+
+@media (min-width: 600px) {
+  .reactions {
+    padding: 12px 18px 0;
+  }
+  .reaction, .reaction-add {
+    border-color: var(--line-strong);
+  }
+  .picker {
+    left: 18px;
+  }
+}
+
 /* ## AVATARS ## */
 
 .avatar {
